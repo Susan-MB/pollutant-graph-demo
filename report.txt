@@ -1,18 +1,10 @@
-SCHADSTOFFGUTACHTEN (synthetisch, nur zu Demonstrationszwecken)
+Schadstoffgutachten (invented sample data)
 
-Objekt:   Verwaltungsgebäude Musterstraße 12
-Adresse:  Musterstraße 12, 66111 Saarbrücken
-Baujahr:  1974
-
-Untersuchungsumfang: Vor Rückbau/Umbau wurden Bauteile beprobt und auf
-Asbest, PAK, PCB, KMF und Blei untersucht.
-
-Probe | Bauteil | Raum | Schadstoff | Gehalt | Einstufung
-P-01 | Fußbodenbelag (Vinyl-Asbest-Platte) | EG-012 | Asbest | 12 Gew.-% | sanierungsbedürftig
-P-02 | Fensterkitt | OG1-104 | PCB | 450 mg/kg | beobachten
-P-03 | Parkettkleber | OG1-110 | PAK | 35 mg/kg | unbedenklich
-P-04 | Mineralwolle-Dämmung | DG-201 | KMF | k.A. | sanierungsbedürftig
-P-05 | Stahltreppe (Anstrich) | TH-01 | Blei | 0,8 Gew.-% | beobachten
-P-06 | Eichentür | OG1-104 | Asbest | 0 Gew.-% | unbedenklich
-
-Hinweis: Probe P-06 war ohne Befund.
+Probe | Bauteil | Raum | Schadstoff | Menge | Bewertung
+P-001 | Bodenbelag | Küche 1 | Asbest | 12,5 mg/kg | sanierungsbedürftig
+P-002 | Fensterkitt | Keller / Nord | PCB | 450 mg/kg | sanierungsbedürftig
+P-003 | Wandfarbe | Büro 2 | Blei | 80 mg/kg | unbedenklich
+P-004 | Dämmung | Dachboden | KMF | n.n. | beobachten
+P-005 | Fliesenkleber | Bad | Asbest | 3 mg/kg | Unbedenklich
+P-006 | kaputte Zeile | Flur
+P-007 | Teerkleber | Flur | PAK | 90 mg/kg | unbekannt
