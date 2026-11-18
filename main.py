@@ -5,7 +5,7 @@ from rdflib import Graph, Literal, Namespace, RDF, RDFS
 EX = Namespace("https://example.org/")
 
 
-# 1) Define what a "finding" looks like. Pydantic checks the data for us.
+
 class Finding(BaseModel):
     sample_id: str
     component: str
@@ -14,7 +14,7 @@ class Finding(BaseModel):
     rating: str
 
 
-# 2) Extract findings from the report text (table rows separated by "|").
+
 def extract(text: str) -> list[Finding]:
     findings = []
     for line in text.splitlines():
@@ -26,7 +26,7 @@ def extract(text: str) -> list[Finding]:
     return findings
 
 
-# 3) Put the findings into a knowledge graph: Room -> Component -> Finding.
+
 def build_graph(findings: list[Finding]) -> Graph:
     g = Graph()
     for f in findings:
@@ -40,8 +40,6 @@ def build_graph(findings: list[Finding]) -> Graph:
     return g
 
 
-# 4) Ask the graph a circular-economy question:
-#    which components are NOT marked "sanierungsbedürftig" (must be remediated)?
 QUERY = """
 PREFIX ex: <https://example.org/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
