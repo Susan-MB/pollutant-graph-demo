@@ -10,37 +10,18 @@ from pydantic import BaseModel, ValidationError
 from rdflib import Graph, Literal, Namespace, RDF, RDFS, XSD
 
 EX = Namespace("https://example.org/")
-log = logging.getLogger("pollutant-demo")
 
 
-class Rating(str, Enum):
-    """Allowed ratings. Adjust to the values your reports actually use."""
-    OK = "unbedenklich"
-    MONITOR = "beobachten"
-    REMEDIATE = "sanierungsbedürftig"
-
-
+# 1) Define what a "finding" looks like. Pydantic checks the data for us.
 class Finding(BaseModel):
     sample_id: str
     component: str
     room: str
     pollutant: str
-    value: float | None = None   
-    unit: str | None = None
-    rating: Rating
+    rating: str
 
 
-_AMOUNT = re.compile(r"^\s*(\d+(?:[.,]\d+)?)\s*(.*?)\s*$")
-
-
-def parse_amount(text: str) -> tuple[float | None, str | None]:
-    """'12,5 mg/kg' -> (12.5, 'mg/kg'); 'n.n.' -> (None, None)."""
-    m = _AMOUNT.match(text)
-    if not m:
-        return None, None
-    return float(m.group(1).replace(",", ".")), (m.group(2) or None)
-
-
+# 2) Extract findings from the report text (table rows separated by "|").
 def extract(text: str) -> list[Finding]:
     findings = []
     for n, line in enumerate(text.splitlines(), start=1):
@@ -63,6 +44,7 @@ def extract(text: str) -> list[Finding]:
     return findings
 
 
+# 3) Put the findings into a knowledge graph: Room -> Component -> Finding.
 def build_graph(findings: list[Finding]) -> Graph:
     g = Graph()
     g.bind("ex", EX)
@@ -89,19 +71,9 @@ def build_graph(findings: list[Finding]) -> Graph:
     return g
 
 
-QUERY = f"""
-PREFIX ex: <https://example.org/>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-SELECT ?room ?component ?pollutant WHERE {{
-  ?r ex:hasComponent ?c ; rdfs:label ?room .
-  ?c rdfs:label ?component ; ex:rating ?rating ; ex:contains ?p .
-  ?p rdfs:label ?pollutant .
-  FILTER (?rating != "{Rating.REMEDIATE.value}")
-}}
-ORDER BY ?room ?component
-"""
-
-QUERY_ROOMS = """
+# 4) Ask the graph a circular-economy question:
+#    which components are NOT marked "sanierungsbedürftig" (must be remediated)?
+QUERY = """
 PREFIX ex: <https://example.org/>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 SELECT DISTINCT ?room WHERE {
